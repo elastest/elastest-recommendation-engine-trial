@@ -1,0 +1,8 @@
+.DS_Store
+/.project
+*.pydevproject
+*.classpath
+*.settings
+*.pyc
+__pycache__/
+/.README.md.html

@@ -1,0 +1,371 @@
+﻿<!--
+# (C) Copyright IBM Corp. 2019
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License. -->
+<div class="row" style="margin-top: 10px;">
+    <div *ngIf="!adminAccess" class="col s12 m6 l6 xl4 offset-m3 offset-l3 offset-xl4 center-align">
+        <a id="recButton" class="waves-light btn" (click)="openModal($event)">New Recommendation</a>
+    </div>
+</div>    
+
+<div id="rec-mzc-dialog" class="modal recommend" materialize="modal" [materializeActions]="modalActions">
+    <div class="modal-content">
+        <div class="row">
+            <div class="col s12">
+                <h5>New Test Case Recommendation</h5>
+            </div>    
+        </div>
+        <div class="row">
+            <div class="col s12">
+                Provide a brief description of the the test case, indicating the area and task you want to test.
+            </div>    
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <div class="left-align" style="display: inline-block; width: 100%">
+                    <div id="areaFieldDiv" class="input-field inline" style="width: 65%; margin-right: 5px;">
+                        <input #areaField id="areaField" type="text" [(ngModel)]="areaString" (focus)="focusStyling($event)" (blur)="unFocusStyling($event)"/>
+                        <label for="areaField" data-error="wrong" data-success="right">Area Description</label>
+                    </div>
+                    <i class="material-icons md-et-yellow" style="cursor: pointer; display: inline-block; vertical-align: middle;" (click)="showFieldDescription('areaDesc')">info</i>
+                </div>
+                <div id="areaDesc" class="scale-transition scale-out">
+                    The description of tested area, e.g "generic conversion service".
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <div class="left-align" style="display: inline-block; width: 100%">
+                    <div id="taskFieldDiv" class="input-field inline" style="width: 65%; margin-right: 5px;">
+                        <input #taskField id="taskField" type="text" [(ngModel)]="taskString" (focus)="focusStyling($event)" (blur)="unFocusStyling($event)"/>
+                        <label for="taskField" data-error="wrong" data-success="right">Task Description</label>
+                    </div>
+                    <i class="material-icons md-et-yellow" style="cursor: pointer; display: inline-block; vertical-align: middle;" (click)="showFieldDescription('taskDesc')">info</i>
+                </div>
+                <div id="taskDesc" class="scale-transition scale-out">
+                    The description of tested task, e.g. "convert map to object".
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div id="settingsIcon" class="valign-wrapper" style="vertical-align: middle; display: inline-block; padding-right: 5px;">
+        </div>
+        <div class="valign-wrapper" style="vertical-align: middle; display: inline-block; padding-right: 10px;">
+            <span id="settingsMsg" style="color: red;"></span>
+        </div>
+        <div style="display: inline-block; padding-right: 10px;">
+            <a id="recDialogCancel" class="waves-effect waves-light btn modal-close">Cancel</a>
+        </div>
+        <div style="display: inline-block;">    
+            <a id="recDialogOk" class="waves-light btn" (click)="search($event)">Ok</a>
+        </div> 
+    </div>
+</div>
+
+<div id="comp-mzc-dialog" class="modal" materialize="modal" [materializeActions]="compModalActions">
+    <div class="modal-content">
+        <div class="row">
+            <div class="col s12">
+                <h5>Compare Testcases</h5>
+            </div>    
+        </div>
+        <div class="row">
+            <div class="col s12" style="display: inline-block;">
+                <div id="packageName1" class="col s6"></div>
+                <div id="packageName2" class="col s6"></div>   
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12" style="display: inline-block;">
+                <div id="className1" class="col s6"></div>
+                <div id="className2" class="col s6"></div>   
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12" style="display: inline-block;">
+                <div id="methodName1" class="col s6"></div>
+                <div id="methodName2" class="col s6"></div>   
+            </div>
+        </div>
+        <div class="row" style="background-color: whitesmoke;">
+            <div id="selectedResult1Body" class="col s6">
+            </div>
+            <div id="selectedResult2Body" class="col s6" style="border-left: 1px solid #666666;">
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div style="display: inline-block;">    
+            <a id="compDialogOk" class="waves-light btn" (click)="compareClose($event)">Ok</a>
+        </div> 
+    </div>
+</div>
+
+<div id="members-mzc-dialog" class="modal" materialize="modal" [materializeActions]="membersModalActions">
+    <div class="modal-content">
+        <div class="row">
+            <div class="col s12">
+                <h5>Class Members</h5>
+            </div>    
+        </div>
+        <div class="row">
+            <div class="col s12" style="display: inline-block;">
+                <div id="membersPackageName" class="col s12"></div>   
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12" style="display: inline-block;">
+                <div id="membersClassName" class="col s12"></div>   
+            </div>
+        </div>
+        <div class="row" style="background-color: whitesmoke;">
+            <div id="membersResultBody" class="col s12">
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div style="display: inline-block;">    
+            <a id="membersDialogOk" class="waves-light btn elastest-button" (click)="membersClose($event)">Ok</a>
+        </div> 
+    </div>
+</div>
+
+<div id="recommendProgress" class="row" style="display: none; margin-top: 6rem;">
+    <div *ngIf="!adminAccess" class="col s12 m6 l6 xl4 offset-m3 offset-l3 offset-xl4 center-align">
+        <div class="center-align valign-wrapper" style="white-space: nowrap; color: rgba(0, 0, 0, 0.54);">
+            <div style="margin: 0 auto;">Generating test case recommendations...</div>
+        </div>
+        <div class="preloader-wrapper small active" style="margin-top: 2rem;">
+            <div class="spinner-layer spinner-yellow-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="adminAccess" class="col s11 m5 l5 xl3 offset-m3 offset-l3 offset-xl4 center-align">
+        <div class="center-align valign-wrapper" style="white-space: nowrap; color: rgba(0, 0, 0, 0.54);">
+            Generating test case recommendations...
+        </div>
+        <div class="preloader-wrapper small active" style="margin-top: 2rem;">
+            <div class="spinner-layer spinner-yellow-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="adminAccess" class="col s1 offset-m3 offset-l3 offset-xl4"></div>
+</div>
+
+<div id="recommendFailure" class="row" style="display: none; margin-top: 6rem; margin-top: 6rem;">
+    <div *ngIf="!adminAccess" class="col s12 m6 l6 xl4 offset-m3 offset-l3 offset-xl4 center-align valign-wrapper">
+        <div style="margin: 0 auto;">
+            <div class="center-align valign-wrapper" style="display: inline-block;">
+                <i class="material-icons md-et-red" style="display: inline-block; vertical-align: middle;">error_outline</i>
+            </div>
+            <div class="center-align valign-wrapper" style="display: inline-block; margin-left: 1rem; white-space: nowrap; color: rgba(200, 42, 14, 1);">
+                There was an issue recommending test cases.
+            </div>
+        </div>
+    </div>
+    <div *ngIf="adminAccess" class="col s11 m6 l6 xl4 offset-m3 offset-l3 offset-xl4 center-align valign-wrapper">
+        <div class="center-align valign-wrapper" style="display: inline-block;">
+            <i class="material-icons md-et-red" style="display: inline-block; vertical-align: middle;">error_outline</i>
+        </div>
+        <div class="center-align valign-wrapper" style="display: inline-block; margin-left: 1rem; white-space: nowrap; color: rgba(200, 42, 14, 1);">
+            There was an issue recommending test cases.
+        </div>
+    </div>
+    <div *ngIf="adminAccess" class="col s1 offset-m3 offset-l3 offset-xl4"></div>
+</div>
+
+<div *ngIf="(searchResults != null && searchResults.length > 0) || generatedTestcase != ''" flex-gt-lg="100" layout-gt-sm="column">
+    <div class="inset">
+        <div layout="column" layout-gt-sm="row">
+            <div flex-gt-sm="100">
+                <div class="card" id="search-results-card">
+                    <div class="card-image calign-wrapper valign-wrapper" style="padding: 0px 2%; background-color: whitesmoke;">
+                        <div style="width: 90%; display: inline-block;">
+                            <div style="width: 100%; display: inline-block;">
+                                <div class="left-align valign-wrapper" style="display: inline-block; color: rgba(0, 0, 0, 0.54);">
+                                    Your description of the test case:&nbsp;
+                                </div>
+                                <div class="left-align valign-wrapper" style="display: inline-block;">
+                                    <span style="color: rgba(0, 0, 0, 0.54);"><b>Area:</b> "{{areaString}}"</span>
+                                </div>
+                                <div class="left-align valign-wrapper" style="display: inline-block;">
+                                    <span style="color: rgba(0, 0, 0, 0.54);"><b>Task:</b> "{{taskString}}"</span>
+                                </div>
+                            </div>
+                            <div style="width: 100%; display: block;">
+                                <div class="left-align valign-wrapper" style="display: inline-block; color: rgba(0, 0, 0, 0.54);">
+                                    Queried model: <b>{{defaultModel}}</b>&nbsp;
+                                </div>
+                            </div>
+                        </div>    
+                        <div class="right-align valign-wrapper" style="vertical-align: middle; width: 10%; display: inline-block; margin: auto 0px;">
+                            <div *ngIf="selectedResults != null && selectedResults.length > 0" class="right-align valign-wrapper" style="display: inline-block;">
+                                <a materialize="dropdown" class="dropdown-button" data-alignment="right" data-activates="resultsDD">
+                                    <i id="resultsDDIcon" class="material-icons md-et-dark" style="padding-top: 5%; cursor:default;">more_horiz</i>
+                                </a>
+                            
+                                <ul id="resultsDD" class="dropdown-content">
+                                    <li id="exportOptionLi" class="left-align valign-wrapper" style="vertical-align: middle;" (click)="exportAsCsv()">
+                                        <div style="margin-left: 2%;" (click)="exportAsCsv()"><i id="exportOptionI" class="material-icons md-et-dark" style="padding-top: 5%;">save</i></div>
+                                        <div style="margin-left: 2%; padding-right: 2%;"><a id="exportOption" (click)="exportAsCsv()">Export as CSV</a></div>
+                                    </li>
+                                    <li *ngIf="selectedResults.length === 1" id="copyOptionLi" class="left-align valign-wrapper"
+                                                                        style="vertical-align: middle;" (click)="copyToClipboard()">
+                                        <div style="margin-left: 2%;" (click)="copyToClipboard()">
+                                            <i id="copyOptionI" class="material-icons md-et-dark" style="padding-top: 5%;">content_copy</i>
+                                        </div>
+                                        <div style="margin-left: 2%; padding-right: 2%;">
+                                            <a id="copyOption" (click)="copyToClipboard()">Copy to Clipboard</a>
+                                        </div>
+                                    </li>
+                                    <li *ngIf="selectedResults.length !== 1" id="copyOptionLi" class="left-align valign-wrapper" 
+                                                                        style="vertical-align: middle;" (click)="menuInactive($event)">
+                                        <div style="margin-left: 2%;" (click)="menuInactive($event)">
+                                            <i id="copyOptionI" class="material-icons md-et-dark md-inactive" style="padding-top: 5%;">content_copy</i>
+                                        </div>
+                                        <div style="margin-left: 2%; padding-right: 2%;">
+                                            <a id="copyOption" (click)="menuInactive($event)">Copy to Clipboard</a>
+                                        </div>
+                                    </li>
+                                    <li *ngIf="selectedResults.length === 2" id="compareOptionLi" class="left-align valign-wrapper" 
+                                                                        style="vertical-align: middle;" (click)="compare()">
+                                        <div style="margin-left: 2%;" (click)="compare()">
+                                            <i id="compareOptionI" class="material-icons md-et-dark" style="padding-top: 5%;">border_vertical</i>
+                                        </div>
+                                        <div style="margin-left: 2%; padding-right: 2%;">
+                                            <a id="compareOption" (click)="compare()">Compare</a>
+                                        </div>
+                                    </li>
+                                    <li *ngIf="selectedResults.length !== 2" id="compareOptionLi" class="left-align valign-wrapper" 
+                                                                        style="vertical-align: middle;" (click)="menuInactive($event)">
+                                        <div style="margin-left: 2%;" (click)="menuInactive($event)">
+                                            <i id="compareOptionI" class="material-icons md-et-dark md-inactive" style="padding-top: 5%;">border_vertical</i>
+                                        </div>
+                                        <div style="margin-left: 2%; padding-right: 2%;">
+                                            <a id="compareOption" (click)="menuInactive($event)">Compare</a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div *ngIf="selectedResults == null || selectedResults.length === 0" class="right-align valign-wrapper" style="display: inline-block;">
+                                <i id="resultsDDIcon" class="material-icons md-et-dark md-inactive" style="padding-top: 5%; cursor:default;">more_horiz</i>
+                            </div>
+                            <div class="right-align valign-wrapper" style="display: inline-block;">
+                                <i class="material-icons md-et-dark" style="padding-top: 5%; cursor: pointer;" (click)="clearSearchResults($event)">cancel</i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="mat-table-container" style="overflow-x: auto;">
+                            <table *ngIf="genTestcaseCompiled" class="td-data-table bordered responsive-table">
+                                <thead>
+                                    <tr class="td-data-table-row">
+                                        <th class="td-data-table-column">
+                                            <span class="md-caption">Recommended test case:</span>
+                                            <i class="material-icons md-et-yellow" style="cursor: pointer; display: inline-block; vertical-align: middle;" (click)="showFieldDescription('recTCDesc')">info</i>
+                                            <div id="recTCDesc" class="scale-transition scale-out">
+                                                New code generated from the provided description. 
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="td-data-table-row" tabindex="-1">
+                                        <td class="td-data-table-cell" colspan="5" style="background-color: whitesmoke; font-family: monospace; padding: 0 0.5rem;">
+                                            <pre *ngIf="genTestcaseCompiled" class="prettyprint lang-java">{{generatedTestcase}}</pre>
+                                            <pre *ngIf="!genTestcaseCompiled" class="prettyprint lang-java">{{generatedTestcase | codeFormat}}</pre>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table *ngIf="searchResults != null && searchResults.length > 0" class="td-data-table bordered responsive-table">
+                                <thead>
+                                    <tr class="td-data-table-row">
+                                        <th class="td-data-table-column" colspan="5">
+                                            <span class="md-caption" style="width: 100%;">Test cases recommended for re-use:</span>
+                                            <i class="material-icons md-et-yellow" style="cursor: pointer; display: inline-block; vertical-align: middle;" (click)="showFieldDescription('reuseTCDesc')">info</i>
+                                            <div id="reuseTCDesc" class="scale-transition scale-out">
+                                                Most similar test cases existing in the repository.
+                                            </div>
+                                        </th>
+                                    </tr>
+                                    <tr class="td-data-table-row">
+                                        <th class="td-data-table-column">
+                                            <span class="md-caption center-align valign-wrapper">
+                                                <input #all class="filled-in" type="checkbox" id="all" value="all" (click)="selectAll($event)">
+                                                <label for="all"></label>
+                                            </span>
+                                        </th>
+                                        <!--<th class="td-data-table-column"><span class="md-caption">Story Id</span></th>-->
+                                        <th class="td-data-table-column"><span class="md-caption">Body</span></th>
+                                        <th class="td-data-table-column"><span class="md-caption">Class Name</span></th>
+                                        <th class="td-data-table-column"><span class="md-caption">Recommended Testcase</span></th>
+                                        <th class="td-data-table-column"><span class="md-caption">Similarity Score</span></th>
+                                        <th class="td-data-table-column"><span class="md-caption">Repository</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let result of searchResults; let i = index;">
+                                    <tr class="td-data-table-row" tabindex="-1">
+                                        <td class="td-data-table-cell center-align valign-wrapper">
+                                            <input class="filled-in resultcb" type="checkbox" id="cb_{{i}}" value="{{i}}" (click)="lineSelect(''+i)">
+                                            <label for="cb_{{i}}"></label>
+                                        </td>
+                                        <!--<td class="td-data-table-cell"></td>-->
+                                        <td class="td-data-table-cell"><a (click)="showStoryBody(''+i)">Show Details</a></td>
+                                        <td class="td-data-table-cell">
+                                            <div materialize="tooltip" class="tooltipped" data-position="right" data-delay="50" [attr.data-tooltip]="''+result?.packageName">
+                                                {{result?.className}}
+                                            </div>
+                                        </td>
+                                        <td class="td-data-table-cell">
+                                            <div materialize="tooltip" class="tooltipped" data-position="right" data-delay="50" [attr.data-tooltip]="''+result?.packageName">
+                                                {{result?.methodName}}
+                                            </div>
+                                        </td>
+                                        <td class="td-data-table-cell">{{result?.similarity | number : '1.2-2'}}</td>
+                                        <td class="td-data-table-cell"><a target="_blank" href="{{result?.originURL}}">{{(result?.repository).split('_')[1]}}</a></td>
+                                    </tr>
+                                    <tr class="td-data-table-row" id="bodyId{{i}}" style="display: none;">
+                                        <td id="bodyIdText{{i}}" class="td-data-table-cell" colspan="5" style="background-color: whitesmoke; font-family: monospace; padding: 0 0.5rem;">
+                                            <pre *ngIf="result?.compiled" class="prettyprint lang-java" style="margin: 1;">{{result?.body}}</pre>
+                                            <pre *ngIf="!(result?.compiled)" class="prettyprint lang-java" style="margin: 0;">{{result?.body | codeFormat}}</pre>
+                                        </td>
+                                        <td class="td-data-table-cell" colspan="1" style="vertical-align: top; text-align: end; background-color: whitesmoke; font-family: monospace; padding: 0 0.5rem;">
+                                            <a *ngIf="result?.classMembers && containsText(result?.classMembers)" id="membersId{{i}}" (click)="showMembers(''+i)">Class Members</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

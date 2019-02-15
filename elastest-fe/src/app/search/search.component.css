@@ -1,0 +1,145 @@
+﻿/*
+# (C) Copyright IBM Corp. 2019
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License. */
+.label:before {
+    content: '';
+    right: 6px;
+    top: 0px;
+    width: 20px;
+    height: 20px;
+    background: #666666;
+    position: absolute;
+    pointer-events: none;
+    display: block;
+}
+
+.recommend select {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    color: #191919;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.recommend select::-ms-expand {
+    display: none;
+}
+
+/* Targetting Webkit browsers only. FF will show the dropdown arrow with so much padding. */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    select {
+        padding-right: 18px
+    }
+}
+
+/* label focus color */
+.recommend select:focus + label {
+    color: #ffac2f;
+}
+
+/* label underline focus color */
+.recommend select:focus {
+    border-bottom: 1px solid #ffac2f;
+    box-shadow: 0 1px 0 0 #ffac2f;
+}
+
+.recommend input[type=text] {
+    width: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+/* label focus color */
+.recommend input[type=text]:focus + label {
+    color: #ffac2f;
+}
+
+/* label underline focus color */
+.recommend input[type=text]:focus {
+    border-bottom: 1px solid #ffac2f;
+    box-shadow: 0 1px 0 0 #ffac2f;
+}
+
+.recommend #recDialogCancel {
+    color: rgba(0, 0, 0, 0.54);
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    background-color: whitesmoke;
+}
+
+.recommend #recDialogOk {
+    color: #fff;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    background-color: #ffac2f; 
+}
+
+#compDialogOk {
+    color: #fff;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    background-color: #ffac2f;    
+}
+
+#recButton {
+    /*color: #ffac2f;*/
+    color: #fff;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    background-color: #ffac2f;
+}
+
+#search-results-card input[type="checkbox"].filled-in:checked + label:after{
+    border: 2px solid #ffac2f;
+    background-color: #ffac2f;
+}
+
+.td-data-table-column {
+    color: rgba(0, 0, 0, 0.54);
+}
+
+.td-data-table-column span {
+    cursor: pointer;
+}
+
+.td-data-table-row:focus {
+    outline: none;
+}
+
+#search-results-card a {
+    color: rgba(0, 0, 0, 0.54);
+    cursor: pointer;
+}
+
+#search-results-card#resultsDD > li > a {
+    color: rgba(19, 19, 19, 1);
+    cursor: pointer;
+}
+
+#search-results-card a:hover {
+    color: #ffac2f;
+}
+
+#search-results-card > li.disabled > a:hover {
+    color: rgba(19, 19, 19, 0.3);
+}
+
+.nav-link a {
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.54);
+}
+
+.nav-link a:hover {
+    color: #ffac2f;
+}
+
+a:hover i {
+    color: #ffac2f;
+}

@@ -1,0 +1,66 @@
+[
+    {
+        "methodName": [ "anbPremiumTest" ],
+        "className": [ "InfoStoreMultiProvenanceRecordTest" ],
+        "body": [ "{\n // RayK This is a test just for ANB Premium manual test to run on opal to get a manual test environment\n // Will be removed in a couple of weeks\n ingest4Entities3Link();\n addProvenaceInformation(TestLawEnforcementSchemaIDsAccessor.EMPLOYMENT_LT_ID, ORIGIN_ID_TYPE, 5);\n addProvenaceInformation(TestLawEnforcementSchemaIDsAccessor.PERSON_ET_ID, ORIGIN_ID_TYPE, 5);\n addProvenaceInformation(TestLawEnforcementSchemaIDsAccessor.ORGANIZATION_ET_ID, ORIGIN_ID_TYPE, 5);\n}" ],
+        "packageName": [ "package com.i2group.disco.test.tests.infostore;" ],
+        "id": "461",
+        "ranker.confidence": 0.5208344204332308
+    },
+    {
+        "methodName": [ "textSearchAndValidateOneLinkFiveHundredRecordsOnLinkEnd" ],
+        "className": [ "InfoStoreMultiProvenanceRecordTest" ],
+        "body": [ "{\n final List<String> ids = Arrays.asList(ORGANIZATION_ID0, PERSON_ID, EMPLOYMENT_ID0);\n ingestTwoEntitiesOneLink();\n Set<OriginIdentifier> allOriginIds = new HashSet<OriginIdentifier>();\n allOriginIds = addProvenaceInformation(TestLawEnforcementSchemaIDsAccessor.PERSON_ET_ID, ORIGIN_ID_TYPE, 1000);\n final Builder<RecordSessionAssertions> assertions = RecordSessionAssertions.builder().withRecordsAndMetadata().withMetadata(ORGANIZATION_ASSERTIONS).withMarkedRecord(sOrganizationExpectedValues).build().withRecordsAndMetadata().withMetadata(PERSON_ASSERTIONS).withMarkedRecord(sPersonExpectedValues).build().withRecordsAndMetadata().withMetadata(EMPLOYMENT_ASSERTIONS).withMarkedRecord(sEmploymentExpectedValues).build();\n searchAndValidateRequestUsingIds(ids, assertions);\n}" ],
+        "packageName": [ "package com.i2group.disco.test.tests.infostore;" ],
+        "id": "466",
+        "ranker.confidence": 0.4359511888762582
+    },
+    {
+        "methodName": [ "textSearchAndValidateOneLinkFiveThousandRecords" ],
+        "className": [ "InfoStoreMultiProvenanceRecordTest" ],
+        "body": [ "{\n final List<String> ids = Arrays.asList(ORGANIZATION_ID0, PERSON_ID, EMPLOYMENT_ID0);\n ingestTwoEntitiesOneLink();\n Set<OriginIdentifier> allOriginIds = new HashSet<OriginIdentifier>();\n ////allOriginIds = addProvenaceInformation(TestLawEnforcementSchemaIDsAccessor.EMPLOYMENT_LT_ID, ORIGIN_ID_TYPE, 5000);\n allOriginIds = addProvenaceInformation(TestLawEnforcementSchemaIDsAccessor.PERSON_ET_ID, ORIGIN_ID_TYPE, 1000);\n final Builder<RecordSessionAssertions> assertions = RecordSessionAssertions.builder().withRecordsAndMetadata().withMetadata(ORGANIZATION_ASSERTIONS).withMarkedRecord(sOrganizationExpectedValues).build().withRecordsAndMetadata().withMetadata(PERSON_ASSERTIONS).withMarkedRecord(sPersonExpectedValues).build().withRecordsAndMetadata().withMetadata(EMPLOYMENT_ASSERTIONS).withMarkedRecord(sEmploymentExpectedValues).build();\n searchAndValidateRequestUsingIds(ids, assertions);\n}" ],
+        "packageName": [ "package com.i2group.disco.test.tests.infostore;" ],
+        "id": "463",
+        "ranker.confidence": 0.43217479723323066
+    },
+    {
+        "methodName": [ "textSearchAndValidateOneLinkFiveHundredRecordsOnLink" ],
+        "className": [ "InfoStoreMultiProvenanceRecordTest" ],
+        "body": [ "{\n final List<String> ids = Arrays.asList(ORGANIZATION_ID0, PERSON_ID, EMPLOYMENT_ID0);\n ingestTwoEntitiesOneLink();\n Set<OriginIdentifier> allOriginIds = new HashSet<OriginIdentifier>();\n allOriginIds = addProvenaceInformation(TestLawEnforcementSchemaIDsAccessor.EMPLOYMENT_LT_ID, ORIGIN_ID_TYPE, 500);\n addProvenaceInformation(TestLawEnforcementSchemaIDsAccessor.PERSON_ET_ID, ORIGIN_ID_TYPE, 1000);\n addProvenaceInformation(TestLawEnforcementSchemaIDsAccessor.ORGANIZATION_ET_ID, ORIGIN_ID_TYPE, 1000);\n final Builder<RecordSessionAssertions> assertions = RecordSessionAssertions.builder().withRecordsAndMetadata().withMetadata(ORGANIZATION_ASSERTIONS).withMarkedRecord(sOrganizationExpectedValues).build().withRecordsAndMetadata().withMetadata(PERSON_ASSERTIONS).withMarkedRecord(sPersonExpectedValues).build().withRecordsAndMetadata().withMetadata(EMPLOYMENT_ASSERTIONS).withMarkedRecord(sEmploymentExpectedValues).build();\n searchAndValidateRequestUsingIds(ids, assertions);\n}" ],
+        "packageName": [ "package com.i2group.disco.test.tests.infostore;" ],
+        "id": "465",
+        "ranker.confidence": 0.4304871237205014
+    },
+    {
+        "methodName": [ "visualQuerySearchAndValidateEntityFiveHundredRecords" ],
+        "className": [ "InfoStoreMultiProvenanceRecordTest" ],
+        "body": [ "{\n ingestPersonEntityRecord(PERSON1_FIRST_NAME, PERSON1_FAMILY_NAME, PERSON1_HEIGHT, 1);\n Set<OriginIdentifier> allOriginIds = new HashSet<OriginIdentifier>();\n allOriginIds = addProvenaceInformation(TestLawEnforcementSchemaIDsAccessor.PERSON_ET_ID, ORIGIN_ID_TYPE, 500);\n final FilterCondition filterCondition = mTextsearchesRequestBuilder.createFilterConditionTypeID(SchemaTypeIds.ENTITY_TYPE_ID_PERSON);\n final List<FilterCondition> filterConditions = Lists.newArrayList(filterCondition);\n final Builder<RecordSessionAssertions> assertions = RecordSessionAssertions.builder().withRecordsAndMetadata().withMetadata(PERSON_ASSERTIONS).withMarkedRecord(sPersonExpectedValues).build();\n// visualQueryRequestUsingConditions(filterConditions, assertions);\n// assertValidRecordGroupResponse(assertions, allOriginIds);\n}" ],
+        "packageName": [ "package com.i2group.disco.test.tests.infostore;" ],
+        "id": "467",
+        "ranker.confidence": 0.40880793705266844
+    },
+    {
+        "methodName": [ "visualQuerySearchAndValidateEntityOneRecord" ],
+        "className": [ "InfoStoreMultiProvenanceRecordTest" ],
+        "body": [ "{\n ingestPersonEntityRecord(PERSON1_FIRST_NAME, PERSON1_FAMILY_NAME, PERSON1_HEIGHT, 1);\n Set<OriginIdentifier> allOriginIds = new HashSet<OriginIdentifier>();\n allOriginIds = addProvenaceInformation(TestLawEnforcementSchemaIDsAccessor.PERSON_ET_ID, ORIGIN_ID_TYPE, 5);\n final FilterCondition filterCondition = mTextsearchesRequestBuilder.createFilterConditionTypeID(SchemaTypeIds.ENTITY_TYPE_ID_PERSON);\n final List<FilterCondition> filterConditions = Lists.newArrayList(filterCondition);\n final Builder<RecordSessionAssertions> assertions = RecordSessionAssertions.builder().withRecordsAndMetadata().withMetadata(PERSON_ASSERTIONS).withMarkedRecord(sPersonExpectedValues).build();\n//visualQueryRequestUsingConditions(filterConditions, assertions);\n//assertValidRecordGroupResponse(assertions, allOriginIds);\n}" ],
+        "packageName": [ "package com.i2group.disco.test.tests.infostore;" ],
+        "id": "462",
+        "ranker.confidence": 0.37991324738175736
+    },
+    {
+        "methodName": [ "textSearchAndValidateOneEntityOneRecord" ],
+        "className": [ "InfoStoreMultiProvenanceRecordTest" ],
+        "body": [ "{\n ingestPersonEntityRecord(PERSON1_FIRST_NAME, PERSON1_FAMILY_NAME, PERSON1_HEIGHT, 1);\n Set<OriginIdentifier> allOriginIds = new HashSet<OriginIdentifier>();\n allOriginIds = addProvenaceInformation(TestLawEnforcementSchemaIDsAccessor.PERSON_ET_ID, ORIGIN_ID_TYPE, 500);\n final List<String> ids = Arrays.asList(PERSON_ID);\n final Builder<RecordSessionAssertions> assertions = RecordSessionAssertions.builder().withRecordsAndMetadata().withMetadata(PERSON_ASSERTIONS).withMarkedRecord(sPersonExpectedValues).build();\n// This will fail as we need to be able to validate record history in assertion framework \n// searchAndValidateRequestUsingIds(ids, assertions);\n// assertValidRecordGroupResponse(assertions, allOriginIds);\n}" ],
+        "packageName": [ "package com.i2group.disco.test.tests.infostore;" ],
+        "id": "460",
+        "ranker.confidence": 0.36913544714695457
+    },
+    {
+        "methodName": [ "textSearchAndValidateOneEntityThousandRecords" ],
+        "className": [ "InfoStoreMultiProvenanceRecordTest" ],
+        "body": [ "{\n ingestPersonEntityRecord(PERSON1_FIRST_NAME, PERSON1_FAMILY_NAME, PERSON1_HEIGHT, 1);\n Set<OriginIdentifier> allOriginIds = new HashSet<OriginIdentifier>();\n allOriginIds = addProvenaceInformation(TestLawEnforcementSchemaIDsAccessor.PERSON_ET_ID, ORIGIN_ID_TYPE, 1000);\n final List<String> ids = Arrays.asList(PERSON_ID);\n final Builder<RecordSessionAssertions> assertions = RecordSessionAssertions.builder().withRecordsAndMetadata().withMetadata(PERSON_ASSERTIONS).withMarkedRecord(sPersonExpectedValues).build();\n searchAndValidateRequestUsingIds(ids, assertions);\n//assertValidRecordGroupResponse(assertions, allOriginIds);\n}" ],
+        "packageName": [ "package com.i2group.disco.test.tests.infostore;" ],
+        "id": "464",
+        "ranker.confidence": 0.30884645346814443
+    }
+]

@@ -1,0 +1,16 @@
+{
+    "clusters": [
+      {
+        "solr_cluster_id": "sc3da6f417_d4ee_4c66_811d_90fac74f9cda",
+        "cluster_name": "cluster_demo",
+        "cluster_size": "1",
+        "solr_cluster_status": "READY"
+      },
+      {
+        "solr_cluster_id": "sc9eb918e9_7dfe_43c0_b7f2_21daf8d95a0d",
+        "cluster_name": "cluster_krambambuli",
+        "cluster_size": "1",
+        "solr_cluster_status": "READY"
+      }
+    ]
+  }
