@@ -14,7 +14,7 @@
 
 from __future__ import print_function
 from flask import jsonify, request
-from flask_restplus import fields, Namespace, Resource
+from flask_restplus import fields, Namespace, reqparse, Resource
 import json
 import os
 import shlex
@@ -23,6 +23,7 @@ import subprocess
 import sys
 import time
 import traceback
+import urllib
 import zipfile
 
 sys.path.append('..')
@@ -40,7 +41,7 @@ RecommendTemplate = api.model('Recommend', {
     'task': fields.String(required=True, description='A description of the tested task', example='convert map to object')
 })
 
-@api.route('/recommend', methods=['POST'])
+@api.route('/recommend', methods=['GET','POST'])
 class Recommend(Resource):
     def create_reusable_list(self, model, nnList, nnSimsList):
         start = time.time()
@@ -79,7 +80,27 @@ class Recommend(Resource):
         print("%s: Completed in %f s" %( time.ctime(end), end-start), flush=True)
 
         return results
+
+    @api.doc(description="Retrieve the details of recommended reusable test cases")
+    def get(self):
+        try:
+            # retrieve the json url param
+            parser = reqparse.RequestParser()
+            parser.add_argument('json')
+            jsonStr = parser.parse_args()
+
+            # unquote the URI encoded param and load as json
+            retrieveObject = json.loads(urllib.parse.unquote(jsonStr['json']))
             
+            model = retrieveObject['model']
+            nnList = retrieveObject['nn']
+            nnSimsList = retrieveObject['nn_sims']
+            results = self.create_reusable_list(model, nnList, nnSimsList)
+            return jsonify({'model_name': model, 'error_message': '', 'result': results})
+        except:
+            traceback.print_exc()
+            return jsonify({'model_name': '', 'error_message': 'There was a problem retrieving reusable test cases.', 'result': 'Failure'})
+
     @api.expect(RecommendTemplate)
     @api.doc(description="Query a Model with a description of the tested area and the tested task to receive a generated Test case and examples of Test cases that can be reused.")
     def post(self):
@@ -141,5 +162,16 @@ class Recommend(Resource):
         # extract the similarity values
         nnSimsList = reusableLists['nn_sims']
 
-        results = self.create_reusable_list(model, nnList, nnSimsList)
-        return jsonify({'model_name': model, 'error_message': '', 'result': {'generated': generatedTestcase, 'genCompiled': genTestcaseCompiled, 'reusable': results}})
+        #results = self.create_reusable_list(model, nnList, nnSimsList)
+        return jsonify({
+            'model_name': model,
+            'error_message': '',
+            'result': {
+                'generated': generatedTestcase,
+                'genCompiled': genTestcaseCompiled,
+                'reusable': {
+                    'nn': nnList,
+                    'nn_sims': nnSimsList
+                }
+            }
+        })
