@@ -1,4 +1,4 @@
-﻿/*
+/*
 # (C) Copyright IBM Corp. 2019
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule, Http, JsonpModule, Jsonp } from '@angular/http';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
-import 'materialize-css';
 import { MaterializeModule } from 'angular2-materialize';
 
 import { CookieService } from 'angular2-cookie/services/cookies.service';

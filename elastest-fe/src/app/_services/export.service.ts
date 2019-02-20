@@ -44,6 +44,6 @@ export class ExportService {
         });
 
         const encodeUri = encodeURI(csvStream);
-        window.open(encodeUri);
+        window.open(encodeUri, '_blank', '');
     }
 }

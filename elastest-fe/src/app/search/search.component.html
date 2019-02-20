@@ -1,4 +1,4 @@
-﻿<!--
+<!--
 # (C) Copyright IBM Corp. 2019
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,12 +35,12 @@
                 <div class="left-align" style="display: inline-block; width: 100%">
                     <div id="areaFieldDiv" class="input-field inline" style="width: 65%; margin-right: 5px;">
                         <input #areaField id="areaField" type="text" [(ngModel)]="areaString" (focus)="focusStyling($event)" (blur)="unFocusStyling($event)"/>
-                        <label for="areaField" data-error="wrong" data-success="right">Area Description</label>
+                        <label for="areaField">Area Description</label>
                     </div>
                     <i class="material-icons md-et-yellow" style="cursor: pointer; display: inline-block; vertical-align: middle;" (click)="showFieldDescription('areaDesc')">info</i>
                 </div>
                 <div id="areaDesc" class="scale-transition scale-out">
-                    The description of tested area, e.g "generic conversion service".
+                    The description of tested area, e.g "ordered integer serialiser".
                 </div>
             </div>
         </div>
@@ -49,12 +49,12 @@
                 <div class="left-align" style="display: inline-block; width: 100%">
                     <div id="taskFieldDiv" class="input-field inline" style="width: 65%; margin-right: 5px;">
                         <input #taskField id="taskField" type="text" [(ngModel)]="taskString" (focus)="focusStyling($event)" (blur)="unFocusStyling($event)"/>
-                        <label for="taskField" data-error="wrong" data-success="right">Task Description</label>
+                        <label for="taskField">Task Description</label>
                     </div>
                     <i class="material-icons md-et-yellow" style="cursor: pointer; display: inline-block; vertical-align: middle;" (click)="showFieldDescription('taskDesc')">info</i>
                 </div>
                 <div id="taskDesc" class="scale-transition scale-out">
-                    The description of tested task, e.g. "convert map to object".
+                    The description of tested task, e.g. "test if can serialise a sample range".
                 </div>
             </div>
         </div>
@@ -304,10 +304,38 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <div *ngIf="genTestcaseCompiled" id="progressDiv" style="display: block; text-align: center; margin-top: 6rem;">
+                                <div style="white-space: nowrap; color: rgba(0, 0, 0, 0.54);">
+                                    Retrieving reusable test cases...
+                                </div>
+                                <div class="preloader-wrapper small active" style="margin-top: 2rem;">
+                                    <div class="spinner-layer spinner-yellow-only">
+                                        <div class="circle-clipper left">
+                                            <div class="circle"></div>
+                                        </div>
+                                        <div class="gap-patch">
+                                            <div class="circle"></div>
+                                        </div>
+                                        <div class="circle-clipper right">
+                                            <div class="circle"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="reusableFailure" style="display: none; text-align: center; margin-top: 6rem;">
+                                <div style="margin: 0 auto;">
+                                    <div class="center-align valign-wrapper" style="display: inline-block;">
+                                        <i class="material-icons md-et-red" style="display: inline-block; vertical-align: middle;">error_outline</i>
+                                    </div>
+                                    <div class="center-align valign-wrapper" style="display: inline-block; margin-left: 1rem; white-space: nowrap; color: rgba(200, 42, 14, 1);">
+                                        There was an issue retrieving reusable test cases.
+                                    </div>
+                                </div>
+                            </div>
                             <table *ngIf="searchResults != null && searchResults.length > 0" class="td-data-table bordered responsive-table">
                                 <thead>
                                     <tr class="td-data-table-row">
-                                        <th class="td-data-table-column" colspan="5">
+                                        <th class="td-data-table-column" colspan="6">
                                             <span class="md-caption" style="width: 100%;">Test cases recommended for re-use:</span>
                                             <i class="material-icons md-et-yellow" style="cursor: pointer; display: inline-block; vertical-align: middle;" (click)="showFieldDescription('reuseTCDesc')">info</i>
                                             <div id="reuseTCDesc" class="scale-transition scale-out">
@@ -322,7 +350,6 @@
                                                 <label for="all"></label>
                                             </span>
                                         </th>
-                                        <!--<th class="td-data-table-column"><span class="md-caption">Story Id</span></th>-->
                                         <th class="td-data-table-column"><span class="md-caption">Body</span></th>
                                         <th class="td-data-table-column"><span class="md-caption">Class Name</span></th>
                                         <th class="td-data-table-column"><span class="md-caption">Recommended Testcase</span></th>
@@ -336,7 +363,6 @@
                                             <input class="filled-in resultcb" type="checkbox" id="cb_{{i}}" value="{{i}}" (click)="lineSelect(''+i)">
                                             <label for="cb_{{i}}"></label>
                                         </td>
-                                        <!--<td class="td-data-table-cell"></td>-->
                                         <td class="td-data-table-cell"><a (click)="showStoryBody(''+i)">Show Details</a></td>
                                         <td class="td-data-table-cell">
                                             <div materialize="tooltip" class="tooltipped" data-position="right" data-delay="50" [attr.data-tooltip]="''+result?.packageName">
