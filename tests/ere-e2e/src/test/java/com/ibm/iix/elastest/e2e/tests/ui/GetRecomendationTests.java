@@ -3,12 +3,7 @@ package com.ibm.iix.elastest.e2e.tests.ui;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -19,10 +14,9 @@ import com.ibm.iix.elastest.e2e.utilities.End2EndTestUtilities;
 
 public class GetRecomendationTests extends End2EndTestUtilities {
 
-	String areaAexpectedMessage = "The description of tested area, e.g \"generic conversion service\".";
-	String TaskexpectedMessage = "The description of tested task, e.g. \"convert map to object\".";
-	
-	
+	String areaAexpectedMessage = "The description of tested area, e.g \"ordered integer serialiser\".";
+	String TaskexpectedMessage = "The description of tested task, e.g. \"test if can serialise a sample range\".";
+
 	private void newTestCaseRecommendation(boolean inlineHelp, boolean checkContent) {
 		logger.info("Opening New Recommendation wizard");
 		driver.findElement(By.id("recButton")).click();
@@ -141,7 +135,7 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 		String methodName = driver.findElement(By.xpath(tablePath + "tbody/tr[1]/td[4]")).getText();
 		String similarityScore = driver.findElement(By.xpath(tablePath + "tbody/tr[1]/td[5]")).getText();
 
-		logger.info("Top result:" + "\nclassName=" + className + "\nmethodName=" + methodName + "\nconfidenceScore="
+		logger.info("Top result:" + "\tclassName=" + className + "\tmethodName=" + methodName + "\tconfidenceScore="
 				+ similarityScore);
 
 		logger.info("Validating class name");
@@ -149,8 +143,9 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 		assertTrue("Class name is empty or invalid", className.length() > 5);
 
 		logger.info("Validating test case name");
+
 		assertNotNull(methodName);
-		assertTrue("Test case name is empty or invalid", methodName.length() > 5);
+		assertTrue("Test case name is empty or invalid", methodName.length() > 4);
 
 		logger.info("Validating similarity score");
 		assertNotNull(similarityScore);
@@ -277,17 +272,17 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 
 		return actualMessage;
 	}
-	
+
 	@Test
 	public void verifyGetRecommendationsInlineHelp() {
 		logger.info("-------------------------- GUI-ERE-010 -------------------------");
 		newTestCaseRecommendation(true, false);
 	}
-	
+
 	@Test
 	public void verifyGetRecommendationsAllContentTrial() {
 		logger.info("-------------------------- GUI-ERE-011 -------------------------");
-		
+
 		newTestCaseRecommendation(false, true);
 	}
 
