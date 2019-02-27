@@ -1,3 +1,19 @@
+/*
+(C) Copyright IBM Corp. 2019
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package com.ibm.iix.elastest.e2e;
 
 import static java.lang.System.getProperty;
@@ -42,7 +58,6 @@ public class EreEnd2EndTests {
 	String localUrl = "http://localhost:37000";
 	String testEnginesUrlPattern = "{0}/#/test-engines{1}";
 
-	// protected String modelName = "apache-commons";
 	protected String modelName = "GenericModel";
 
 	protected String areaQuery = "test abstract configuration basic features";
@@ -89,14 +104,9 @@ public class EreEnd2EndTests {
 				driver = new FirefoxDriver();
 			}
 
-			// System.setProperty("webdriver.chrome.driver",
-			// System.getProperty("user.dir") +
-			// "/src/test/resources/chromedriver");
-			// driver = new ChromeDriver();
 			driver.manage().window().setSize(new Dimension(1024, 800));
 
 		} else {
-			// DesiredCapabilities capabilities = DesiredCapabilities.chrome();
 			DesiredCapabilities capabilities;
 
 			if (browserType == null || browserType.equals(CHROME)) {
@@ -107,7 +117,6 @@ public class EreEnd2EndTests {
 				logger.info("Browser Type: {}", browserType);
 			}
 
-			// capabilities.setBrowserName("chrome");
 			capabilities.setCapability("testName", name.getMethodName());
 			driver = new RemoteWebDriver(new URL(eusApi), capabilities);
 			driver.manage().window().maximize();
@@ -119,7 +128,6 @@ public class EreEnd2EndTests {
 			driver.get("http://" + tormUsername + ":" + tormPassword + "@" + tormUrl.split("//")[1]);
 		} else
 			driver.manage().timeouts().implicitlyWait(30, SECONDS);
-		// driver.manage().window().setSize(new Dimension(1024, 800));
 		driver.get(tormUrl);
 
 		try {
@@ -143,8 +151,6 @@ public class EreEnd2EndTests {
 			Assert.fail("ERE engines are already started or element does not displyed " + e.toString());
 		}
 
-		// workaround for TORM View Engine button issue
-
 		try {
 			new WebDriverWait(driver, 240).ignoring(StaleElementReferenceException.class).until((WebDriver d) -> {
 				WebElement we = d
@@ -158,8 +164,6 @@ public class EreEnd2EndTests {
 			logger.info("Unable to find View Engine button. Directly accessing ere page");
 			driver.get(MessageFormat.format(testEnginesUrlPattern, tormUrl, "/ere"));
 
-			// need another delay here as the platform does not load
-			// instantaneously
 			try {
 				new WebDriverWait(driver, 120).ignoring(StaleElementReferenceException.class).until((WebDriver d) -> {
 					WebElement we = d.findElement(By.id("nav_test_engines"));
@@ -168,13 +172,6 @@ public class EreEnd2EndTests {
 			} catch (TimeoutException te) {
 				logger.info("ere page should be loaded by now");
 			}
-			/*
-			 * new WebDriverWait(driver, 120) .until(
-			 * //ExpectedConditions.visibilityOfElementLocated(By.xpath(
-			 * "//input[@type='text']"))
-			 * ExpectedConditions.visibilityOfElementLocated(By.id("recButton"))
-			 * );
-			 */
 		}
 
 		if ((tormUsername != null && tormUsername.compareTo("") != 0)
@@ -187,13 +184,6 @@ public class EreEnd2EndTests {
 		driver.switchTo().frame(driver.findElement(By.name("engine")));
 
 		logger.info("-------------- " + name.getMethodName() + " --------------");
-		// logger.info("Logging in as " + username + " / " + password);
-		// driver.findElement(By.xpath("//input[@type='text']"))
-		// .sendKeys(username);
-		// driver.findElement(By.id("pwordField"))
-		// .sendKeys(password);
-		// driver.findElement(By.id("loginButton"))
-		// .click();
 
 	}
 
@@ -215,9 +205,14 @@ public class EreEnd2EndTests {
 		if (driver != null)
 			driver.quit();
 
-		// cleanUpTest();
 	}
 
+	/**
+	 * method waits for web element until it's displayed
+	 * 
+	 * @param by
+	 * @param timeout
+	 */
 	public void waitForElementPresent(final By by, int timeout) {
 		WebDriverWait wait = (WebDriverWait) new WebDriverWait(driver, timeout).ignoring(WebDriverException.class)
 				.ignoring(ElementNotVisibleException.class).ignoring(InvalidElementStateException.class)
@@ -231,11 +226,23 @@ public class EreEnd2EndTests {
 		});
 	}
 
+	/**
+	 * method waits for webelement until it's displayed
+	 * 
+	 * @param seconds
+	 * @param xpathExpression
+	 */
 	public void waitForVisibility(int seconds, String xpathExpression) {
 		new WebDriverWait(driver, seconds)
 				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpathExpression)));
 	}
 
+	/**
+	 * method waits for webelement until it's displayed
+	 * 
+	 * @param seconds
+	 * @param by
+	 */
 	public void waitForVisibility(int seconds, By by) {
 		new WebDriverWait(driver, seconds).until(ExpectedConditions.visibilityOfElementLocated(by));
 	}

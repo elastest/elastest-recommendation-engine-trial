@@ -1,3 +1,19 @@
+/*
+(C) Copyright IBM Corp. 2019
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package com.ibm.iix.elastest.e2e.tests.ui;
 
 import static org.junit.Assert.assertNotNull;
@@ -17,6 +33,13 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 	String areaAexpectedMessage = "The description of tested area, e.g \"ordered integer serialiser\".";
 	String TaskexpectedMessage = "The description of tested task, e.g. \"test if can serialise a sample range\".";
 
+	/**
+	 * method for generate new recommendation test, then method checks if help
+	 * section is correct, also method checks if all UI content is correct
+	 * 
+	 * @param inlineHelp
+	 * @param checkContent
+	 */
 	private void newTestCaseRecommendation(boolean inlineHelp, boolean checkContent) {
 		logger.info("Opening New Recommendation wizard");
 		driver.findElement(By.id("recButton")).click();
@@ -62,7 +85,6 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 		logger.info("Running query");
 		driver.findElement(By.id("recDialogOk")).click();
 
-		// wait for the results pane
 		waitForVisibility(20, "//div[@id='search-results-card']");
 
 		if (checkContent) {
@@ -74,12 +96,10 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 			scrollPage(0, 250);
 			scrollPage(0, -250);
 			checkNewRecomendationButton();
-			// checkContentButtonWorks();
 		} else {
 			logger.info("Does not checking content ");
 		}
 
-		// generated test case
 		String generatedTestcase = null;
 		int tableIterator = 1;
 		String tablePath = "//table[" + tableIterator + "]/";
@@ -128,7 +148,6 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 			logger.info("inline new recomendation help content set to: not checking");
 		}
 
-		// re-usable test case
 		if (tablePathFlag)
 			tablePath = "//table[" + tableIterator + "]/";
 		String className = driver.findElement(By.xpath(tablePath + "tbody/tr[1]/td[3]")).getText();
@@ -152,10 +171,13 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 		assertTrue("Invalid Similarity score", Double.parseDouble(similarityScore) >= Double.parseDouble(similarityT));
 
 		if (checkContent) {
-			checkContentButtonWorks();
+			checkCloseContentButtonWorks();
 		}
 	}
 
+	/**
+	 * method check if wizard content display correct
+	 */
 	private void checkNewRecomendationButton() {
 		logger.info("Check that new recomendation wizard display again");
 		driver.findElement(By.xpath("//*[@id=\"recButton\"]")).click();
@@ -170,21 +192,30 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 			logger.error("Wizard does not display");
 			Assert.fail("Wizard does not display");
 		}
-
 		driver.findElement(By.xpath("//*[@id=\"recDialogCancel\"]")).click();
 	}
 
-	private void checkContentButtonWorks() {
+	/**
+	 * method to check if recommendation wizard can be closes success
+	 */
+	private void checkCloseContentButtonWorks() {
 		logger.info("Check if close button works ");
 		try {
 			logger.info("Close button works");
 			driver.findElement(By.xpath("//*[@id=\"search-results-card\"]/div[1]/div[2]/div[2]/i")).click();
+			// *[@id="recDialogCancel"]
 		} catch (Exception e) {
 			logger.error("Close button does not works");
 			Assert.fail("Close button does not works");
 		}
 	}
 
+	/**
+	 * Method for scroll webpage up or down
+	 * 
+	 * @param x
+	 * @param y
+	 */
 	private void scrollPage(int x, int y) {
 		logger.info("Scroling ");
 
@@ -196,7 +227,6 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 		}
 
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-		// js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
 		js.executeScript(execute);
 
 		try {
@@ -206,6 +236,9 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 		}
 	}
 
+	/**
+	 * methods verify that show details section contains correct content
+	 */
 	private void checkShowDetails() {
 		driver.findElement(By.xpath("//*[@id=\"search-results-card\"]/div[2]/div/table[2]/tbody[1]/tr[1]/td[2]/a"))
 				.click();
@@ -220,6 +253,11 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 		}
 	}
 
+	/**
+	 * method verify that queried model is correct displayed on UI
+	 * 
+	 * @param modelName
+	 */
 	private void checkQueriedModel(String modelName) {
 		logger.info("Check if new recommendation equals to selected model:  " + modelName);
 		WebElement model = driver.findElement(By.xpath("//*[@id=\"search-results-card\"]/div[1]/div[1]/div[2]/div/b"));
@@ -234,6 +272,9 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 		}
 	}
 
+	/**
+	 * method verify that area details are displayed correct
+	 */
 	private void checkAreaDetails() {
 		logger.info("Check if description of the test case: Area equals to displayed content");
 		WebElement areaBody = driver
@@ -249,6 +290,9 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 		}
 	}
 
+	/**
+	 * method verify that task details are displayed correct
+	 */
 	private void checkTaskDetails() {
 		logger.info("Check if description of the test case: Task equals to displayed content");
 		WebElement areaBody = driver
@@ -264,6 +308,14 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 		}
 	}
 
+	/**
+	 * method which get webelement to string and parse this string. Remove all
+	 * whitspaces
+	 * 
+	 * @param row
+	 * @param rawString
+	 * @return
+	 */
 	private String formatDetailsBody(int row, String rawString) {
 
 		String cutString = rawString.substring(row);
@@ -282,8 +334,6 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 	@Test
 	public void verifyGetRecommendationsAllContentTrial() {
 		logger.info("-------------------------- GUI-ERE-011 -------------------------");
-
 		newTestCaseRecommendation(false, true);
 	}
-
 }
