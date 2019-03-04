@@ -17,6 +17,10 @@ from flask import render_template
 # custom modules
 from __init__ import app, pool
 
+@app.route('/help/', methods=['GET','POST'])
+def help():
+	return render_template('help.html')
+
 @app.route('/ere-app/', methods=['GET','POST'])
 def index():
 	return render_template('index.html')

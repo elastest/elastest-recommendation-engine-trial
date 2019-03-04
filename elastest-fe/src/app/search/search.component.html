@@ -13,8 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License. -->
 <div class="row" style="margin-top: 10px;">
-    <div *ngIf="!adminAccess" class="col s12 m6 l6 xl4 offset-m3 offset-l3 offset-xl4 center-align">
+    <div *ngIf="adminAccess" class="col s12 m6 l6 xl4 offset-m3 offset-l3 offset-xl4 center-align">
         <a id="recButton" class="waves-light btn" (click)="openModal($event)">New Recommendation</a>
+    </div>
+    <div *ngIf="!adminAccess" class="col s11 m5 l5 xl3 offset-m3 offset-l3 offset-xl4 center-align"> 
+        <a id="recButton" class="waves-light btn" (click)="openModal($event)">New Recommendation</a>
+    </div>
+    <div *ngIf="!adminAccess" class="col s1 offset-m3 offset-l3 offset-xl4 right-align">
+        <div class="right-align" style="margin-top: 0.5em; overflow: none !important;">
+            <a materialize="dropdown" class="dropdown-button" data-alignment="right" data-activates="settingsDD">
+                <i class="material-icons md-et-dark">more_vert</i>
+            </a>
+            <ul id="settingsDD" class="dropdown-content">
+                <li><a target="_blank" href="/help/">Help</a></li>
+            </ul>
+        </div>
     </div>
 </div>    
 
@@ -143,7 +156,7 @@
 </div>
 
 <div id="recommendProgress" class="row" style="display: none; margin-top: 6rem;">
-    <div *ngIf="!adminAccess" class="col s12 m6 l6 xl4 offset-m3 offset-l3 offset-xl4 center-align">
+    <div *ngIf="adminAccess" class="col s12 m6 l6 xl4 offset-m3 offset-l3 offset-xl4 center-align">
         <div class="center-align valign-wrapper" style="white-space: nowrap; color: rgba(0, 0, 0, 0.54);">
             <div style="margin: 0 auto;">Generating test case recommendations...</div>
         </div>
@@ -159,7 +172,7 @@
             </div>
         </div>
     </div>
-    <div *ngIf="adminAccess" class="col s11 m5 l5 xl3 offset-m3 offset-l3 offset-xl4 center-align">
+    <div *ngIf="!adminAccess" class="col s11 m5 l5 xl3 offset-m3 offset-l3 offset-xl4 center-align">
         <div class="center-align valign-wrapper" style="white-space: nowrap; color: rgba(0, 0, 0, 0.54);">
             Generating test case recommendations...
         </div>
@@ -179,7 +192,7 @@
 </div>
 
 <div id="recommendFailure" class="row" style="display: none; margin-top: 6rem; margin-top: 6rem;">
-    <div *ngIf="!adminAccess" class="col s12 m6 l6 xl4 offset-m3 offset-l3 offset-xl4 center-align valign-wrapper">
+    <div *ngIf="adminAccess" class="col s12 m6 l6 xl4 offset-m3 offset-l3 offset-xl4 center-align valign-wrapper">
         <div style="margin: 0 auto;">
             <div class="center-align valign-wrapper" style="display: inline-block;">
                 <i class="material-icons md-et-red" style="display: inline-block; vertical-align: middle;">error_outline</i>
@@ -189,7 +202,7 @@
             </div>
         </div>
     </div>
-    <div *ngIf="adminAccess" class="col s11 m6 l6 xl4 offset-m3 offset-l3 offset-xl4 center-align valign-wrapper">
+    <div *ngIf="!adminAccess" class="col s11 m6 l6 xl4 offset-m3 offset-l3 offset-xl4 center-align valign-wrapper">
         <div class="center-align valign-wrapper" style="display: inline-block;">
             <i class="material-icons md-et-red" style="display: inline-block; vertical-align: middle;">error_outline</i>
         </div>
