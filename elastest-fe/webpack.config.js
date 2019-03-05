@@ -1,4 +1,4 @@
-﻿/*
+/*
 # (C) Copyright IBM Corp. 2019
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,7 @@
 
 entry: {
 	app: 'src/index.html'
-},
+}
 
 output: {
 	filename: '[name].js'

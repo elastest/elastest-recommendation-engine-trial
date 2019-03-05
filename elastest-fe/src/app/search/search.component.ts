@@ -1,4 +1,4 @@
-﻿/*
+/*
 # (C) Copyright IBM Corp. 2019
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -333,7 +333,6 @@ export class SearchComponent implements AfterViewChecked, AfterViewInit, OnInit 
     }
 
     showStoryBody(id: string) {
-		// console.log("Show me:" + id);
         const targetRow = document.getElementById(`bodyId${id}`);
         const currentDisplay = targetRow.style.display;
         if (currentDisplay === 'none') {
@@ -342,7 +341,6 @@ export class SearchComponent implements AfterViewChecked, AfterViewInit, OnInit 
             targetRow.style.display = 'none';
         }
 
-        // this.storyDetails = this.searchResults.filter(result => result.id === id)[0].body;
         this.storyDetails = this.searchResults.toString();
 
         let dispString = this.storyDetails.toString().replace(/;/g, ';\n');
@@ -374,10 +372,20 @@ export class SearchComponent implements AfterViewChecked, AfterViewInit, OnInit 
     setInProgress(inProgress: boolean) {
         if (inProgress) {
             $('#recButton').addClass('disabled');
-            $('#recommendProgress').css( 'display', 'block');
+            $('#recommendProgress').css('display', 'block');
         } else {
             $('#recButton').removeClass('disabled');
-            $('#recommendProgress').css( 'display', 'none');
+            $('#recommendProgress').css('display', 'none');
+        }
+    }
+
+    setReusableInProgress(inProgress: boolean) {
+        if (inProgress) {
+            $('#recButton').addClass('disabled');
+            $('#progressDiv').css('display', 'block');
+        } else {
+            $('#recButton').removeClass('disabled');
+            $('#progressDiv').css('display', 'none');
         }
     }
 
@@ -386,6 +394,14 @@ export class SearchComponent implements AfterViewChecked, AfterViewInit, OnInit 
             $('#recommendFailure').css( 'display', 'block');
         } else {
             $('#recommendFailure').css( 'display', 'none');
+        }
+    }
+
+    setReusableFailure(failure: boolean) {
+        if (failure) {
+            $('#reusableFailure').css( 'display', 'block');
+        } else {
+            $('#reusableFailure').css( 'display', 'none');
         }
     }
 
@@ -432,9 +448,6 @@ export class SearchComponent implements AfterViewChecked, AfterViewInit, OnInit 
     }
 
     search(event) {
-        // this.defaultModel = this.searchService.getModelCookie();
-        // this.defaultUUID = this.searchService.getUUIDCookie();
-
         if ( this.checkInput() ) {
             this.setRecommendFailure(false);
             this.modalActions.emit({action: 'modal', params: ['close']});
@@ -452,8 +465,7 @@ export class SearchComponent implements AfterViewChecked, AfterViewInit, OnInit 
             this.setInProgress(true);
 
             this.searchService.search(body)
-                .subscribe(
-                data => {
+                .subscribe(data => {
                         this.searchResultsJson = data;
                     },
                     err => {
@@ -468,10 +480,37 @@ export class SearchComponent implements AfterViewChecked, AfterViewInit, OnInit 
                         if ( error_message == null || error_message === '') {
                             this.generatedTestcase = this.searchResultsJson['result']['generated'];
                             this.genTestcaseCompiled = this.searchResultsJson['result']['genCompiled'];
-                            this.searchResults = this.searchResultsJson['result']['reusable'];
-                            if (this.searchResults == null || this.searchResults.length === 0 ) {
-                                this.setRecommendFailure(true);
-                            }
+
+                            // now retrieve the reusable test cases
+                            const retrieveBody = {
+                                model: this.defaultModel,
+                                nn: this.searchResultsJson['result']['reusable']['nn'],
+                                nn_sims: this.searchResultsJson['result']['reusable']['nn_sims']
+                            };
+
+                            this.searchService.retrieve(retrieveBody)
+                                .subscribe(retrieveData => {
+                                    this.searchResultsJson = retrieveData;
+                                },
+                                retrieveErr => {
+                                    console.log('Error running retrieve. Error: %s, URL: %s',
+                                    retrieveErr.status, retrieveErr.url);
+                                    this.setReusableInProgress(false);
+                                    this.setReusableFailure(true);
+                                },
+                                () => {
+                                    const retrieveError = this.searchResultsJson['error_message'];
+                                    if (retrieveError == null || retrieveError === '') {
+                                        this.searchResults = this.searchResultsJson;
+                                        if (this.searchResults == null || this.searchResults.length === 0 ) {
+                                            this.setReusableFailure(true);
+                                        }
+                                        this.setReusableInProgress(false);
+                                    } else {
+                                        this.setReusableInProgress(false);
+                                        this.setReusableFailure(true);
+                                    }
+                                });
                         } else {
                             this.setRecommendFailure(true);
                         }

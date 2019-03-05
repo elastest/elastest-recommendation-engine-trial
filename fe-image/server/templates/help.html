@@ -1,0 +1,93 @@
+<h1 id="elastest-recommendation-engine">ElasTest Recommendation Engine</h1>
+<p>ElasTest Recommendation Engine (ERE) supports test automation developers by providing two types of recommendations. First, it recommends complete Java implementations of unit test cases based on short descriptions in natural language provided by a tester. Second, it recommends a list of test cases that are most relevant to the test case generated based on user&#39;s description.</p>
+<p>ERE is based on Neural Translation Model - a state-of-the-art approach to machine translation applied to code generation. It is trained on data stored in software repositories to learn deep vector representations of source code modules, and uses these representations to map natural language descriptions to source code (for the first type of recommendations) and to compute the degree of similarity between test cases (for the second type of recommendations). </p>
+<p>Users can upload their own, project-specific test data to train custom machine learning models. Current implementation supports training on, and recommending of unit test cases written in Java.</p>
+<h2 id="features">Features</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Recommending new automated test cases</td>
+<td>Based on short natural language description of a test case, user receives recommended Java implementation of that test case (newly generated code).</td>
+</tr>
+<tr>
+<td>Recommending automated test cases for reuse/adaptation</td>
+<td>Based on short natural language description of a test case, user receives a list of existing automated test cases that are most relevant to the query.</td>
+</tr>
+<tr>
+<td>&lt;a name=&quot;pipelinedesc&quot;&gt;&lt;/a&gt;Automated end-to-end preprocessing pipeline</td>
+<td>User can initiate automated process that includes loading data from a remote or local repository, crawling the repositories and selecting relevant data, parsing and cleaning, synthetizing training corpora and extracting vocabularies.</td>
+</tr>
+<tr>
+<td>Training custom models</td>
+<td>Users can train custom models on project-specific data. </td>
+</tr>
+<tr>
+<td>Flexible storage</td>
+<td>Users can choose to store their data: (1) directly on the local filesystem; (2) on ElasTest Alluxio instance.</td>
+</tr>
+<tr>
+<td>Graphical User Interface</td>
+<td>User can perform all the above operations via GUI, which is embedded as an iframe in ElasTest Dashboard. </td>
+</tr>
+</tbody>
+</table>
+<h2 id="how-to-run">How to run</h2>
+<p>ElasTest Recommendation Engine runs in the context of <a href="https://elastest.io/docs/">ElasTest platform</a> and can be launched from ElasTest Dashboard.</p>
+<h4 id="procedure">Procedure</h4>
+<ol>
+<li>Start ElasTest platform.</li>
+<li>Use browser to access ElasTest Dashboard.</li>
+<li>Navigate to Test Engines page and start &#39;ere&#39;.</li>
+<li>Click on eye icon to access ERE UI.</li>
+</ol>
+<p><img src="/assets/img/test-engines.png" alt="alt text"></p>
+<h2 id="explore-ere-ui">Explore ERE UI</h2>
+<p>User interface is logically divided into Tester part and Admin part. Within Tester UI, user can choose the model to query, input natural language descriptions and view the recommendations.<br>Admin Dashboard enables uploading user data, launching automated preprocessing and launching training of custom models.</p>
+<p><img src="/assets/img/query/default-settings1.png" width="888px" alt="alt text"></p>
+<h3 id="default-settings">Default Settings</h3>
+<p>This is a simple configuration panel to allow you to view the available models and choose the one to be queried. Click on the More Options menu to open the panel, expand Models dropdown, select a model and click Save. The selected model will be used for generating recommendations. You can now return to the main page and query for recommendations. </p>
+<p>Note: Default Settings shows models that are already trained. Two models trained on large open-source repositories - <a href="https://github.com/ReactiveX/RxJava">ReactiveX</a> and <a href="https://github.com/spring-projects/spring-framework">spring-framework</a> - are provided for demonstration purposes. You can train your own models using <a href="#admin_dashboard">Admin Dashboard</a>, and they will be available in Default Settings after the training process has completed.</p>
+<p><img src="/assets/img/query/default-settings2.png" alt="ecie" align="middle" width="450px"/></p>
+<h3 id="new-recommendation-wizard">New Recommendation wizard</h3>
+<p>Click on &#39;New Recommendation&#39; button in the main page to enter a description of a test case. In the &#39;Area Description&#39; field, provide a more general description of the tested area, such as a description of class under test. In the &#39;Task Description&#39; field, indicate the specific task or functionality to be tested. Click OK to submit your query.</p>
+<p><img src="/assets/img/query/enter-query.png" alt="alt text"></p>
+<h3 id="results-page">Results Page</h3>
+<p>For each query, ERE produces two types of recommendations: (1) new code generated from the area and task description, and (2) a list of existing test cases retrieved from the software repository based on their similarity to the generated test case.</p>
+<h4 id="generated-code">Generated code</h4>
+<p>The new code inferred by the machine learning model is checked for compilability. If it compiles, it is displayed on the top of the page, otherwise it is skipped. </p>
+<p><img src="/assets/img/query/query_results1.png" alt="alt text"></p>
+<h4 id="test-cases-for-reuse">Test cases for reuse</h4>
+<p>The list of existing test cases recommended for re-use is displayed in a table. The table provides infomation that helps to locate the reusable test cases in the repository. Each row includes the name of the class containing the recommended test method, the name of that method, and the score indicating the degree of similarity to the generated code. </p>
+<p>Click on &#39;Show Details&#39; link to display the body of the method. </p>
+<p>Hover over a class name to view package name.</p>
+<p><img src="/assets/img/query/query_results2.png" alt="alt text"></p>
+<h3 id="admin-dashboard">Admin Dashboard</h3>
+<p>Admin Dashboard, accessed via &#39;More Option&#39; button in the main page, comprises three tabs corresponding to main admin activities required for training a custom model on project-specific data defined by the user: Preprocess, Submit Data and Train.</p>
+<h4 id="preprocess-tab">Preprocess tab</h4>
+<p>This tab combines loading data and pushing them through the <a href="#pipelinedesc">preprocessing pipeline</a>. After providing all the required information, click Preprocess button and wait for the confirmation message. Preprocessed dataset will be added to the list of datasets in &#39;Submit Dataset&#39; tab. The following paragraphs explain in detail the input required for each field.</p>
+<h5 id="loading-data">Loading data</h5>
+<p>Data can be loaded from a repository stored on your local filesystem or from a remote location. For the first option, select <strong>Local</strong> radio button, click on &#39;Select Local Repository&#39; button and navigate to the directory storing data in a zip file. You can specify a custom name for the dataset, which also will be used as the model name. If you do not specify the label, zip file name will be used as both dataset and model label.</p>
+<p><img src="/assets/img/preprocess/load.png" alt="alt text"></p>
+<p>To load data from a remote location, select <strong>Remote</strong> option, and provide url for the remote repository. As with the local option, you can specify custom label for your dataset and model.</p>
+<p><img src="/assets/img/preprocess/load_remote.png" alt="alt text"></p>
+<h5 id="storage-type">Storage type</h5>
+<p>Choose the preferred option for storing preprocessed datasets:</p>
+<ul>
+<li>Local: datasets will be saved directly on your local filesystem. This option is available via Docker volume created when ERE container is started. The volume maps to a default location <code>&lt;user-home&gt;/ere-data</code>. </li>
+<li>Alluxio: datasets will be stored on Alluxio provided by  <a href="https://github.com/elastest/elastest-data-manager/blob/master/docs/index.md">ElasTest Data Manager</a>. Alluxio instance is only available when the platform runs in <a href="https://elastest.io/docs/experimental/">experimental</a> mode.</li>
+</ul>
+<h5 id="add-comments">Add Comments</h5>
+<p>This setting applies to one of the final steps in pre-processing pipeline, which is synthetising training corpora. User can choose whether to include inline comments in the training data or to reject these comments. Which option should be used, depends very much on the quality and consistency of inline comments occurring in your test data. If unsure, leave this option unchecked. </p>
+<h5 id="sequence-lengths">Sequence Lengths</h5>
+<p>You can specify the minimum and maximum length of sequences that will be included in the source and target training corpus. The recommended minimum value is 5, since shorter sequences are not likely to be meaningful. Optimal value for maximum length depends on test data characteristics; the recommended value is between 50 and 300. </p>
+<h4 id="submit-dataset-tab">Submit Dataset tab</h4>
+<p>This tab allows you to view, select and submit for training all pre-processed datasets availble on on your system. Select the dataset you want to send to the machine learning executor, and click Submit button. The submitted dataset will be added to Data Collections available in Train tab.</p>
+<h4 id="train-tab">Train tab</h4>
+<p>In this tab user can view Data Collections available for training, select the one you want to train the model for, and launch training process. Note that training is a lengthy process, typically taking from 3 to 8 hours. The exact time depends on the size of the Data Collection, which is the function of the number of test cases in the original software repository, and sequence lengths specified at preprocessing stage.</p>
+<p>After completed training, the new model is available in <a href="#default_settings">Default Settings</a> dropdown list, and can be queried for recommendations.</p>

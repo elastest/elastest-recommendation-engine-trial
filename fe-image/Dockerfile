@@ -34,6 +34,18 @@ RUN apt-get update && \
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
 RUN export JAVA_HOME
 
+# Install git with lfs
+#RUN apt-get install -y git &&\
+#	curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash &&\
+#	apt-get -y install git-lfs &&\
+#	mkdir temp &&\
+#	git clone https://github.com/elastest/elastest-recommendation-engine-trial.git temp &&\
+#	cp -r temp/fe-image/server/* /app/ &&\
+#	cp temp/fe-image/server/static/favicon-16x16.png /usr/local/lib/python3.6/site-packages/flask_restplus/static/favicon-16x16.png &&\
+#	cp temp/fe-image/server/static/favicon-32x32.png /usr/local/lib/python3.6/site-packages/flask_restplus/static/favicon-16x16.png &&\
+#	rm -rf temp
+# finish lfs 
+
 COPY ./server /app
 COPY ./server/static/favicon-16x16.png /usr/local/lib/python3.6/site-packages/flask_restplus/static/favicon-16x16.png
 COPY ./server/static/favicon-32x32.png /usr/local/lib/python3.6/site-packages/flask_restplus/static/favicon-32x32.png

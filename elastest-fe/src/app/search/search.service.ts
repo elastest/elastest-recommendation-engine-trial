@@ -1,4 +1,4 @@
-﻿/*
+/*
 # (C) Copyright IBM Corp. 2019
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +30,14 @@ export class SearchService {
 
     getUUIDCookie(): string {
         return this.cookieService.get('ere-app-default-uuid');
+    }
+
+    retrieve(reusable: Object): Observable<Array<any>> {
+        const retUrl = 'ere-app/api/v1.0/recommend';
+        const reusableString = JSON.stringify(reusable);
+
+        return this.http.get(retUrl + '?json=' + encodeURIComponent(reusableString))
+            .map(res => res.json().result);
     }
 
     search(body: Object): Observable<Array<any>> {
