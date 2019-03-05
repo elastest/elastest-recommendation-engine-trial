@@ -72,7 +72,7 @@ class RecommendingModel(Seq2SeqModel):
 
         
     def is_alignment_history(self):
-        return self.hp.infer_mode == 'greedy'
+        return True
 
              
     def run_decoder(self, decoder_cell, decoder_initial_state, scope):
@@ -104,18 +104,7 @@ class RecommendingModel(Seq2SeqModel):
             
     def setup_computations(self):
         self.sample_words = self.reverse_tgt_vocab_table.lookup(tf.to_int64(self.sample_id))
-        
-        #attention summary
-        attention_images = (self.final_state.alignment_history.stack())
-        attention_images = tf.expand_dims(tf.transpose(attention_images, [1,2,0]), -1)
-        attention_images *=255
-        self.attention_summary = tf.summary.image("attention_images", attention_images)
-        
-        
-    def decode(self, session):
-        _, infer_summary, _, sample_words = self.infer(session)
-        return sample_words.transpose() if self.hp.time_major else sample_words, infer_summary
 
     
     def infer(self, session):
-        return session.run([self.logits, self.attention_summary, self.sample_id, self.sample_words])
+        return session.run([self.logits, self.sample_id, self.sample_words])

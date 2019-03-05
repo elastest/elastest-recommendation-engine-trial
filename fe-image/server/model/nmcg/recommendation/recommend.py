@@ -47,9 +47,9 @@ def run(params):
     with tf.Session(config=tf.ConfigProto(log_device_placement=False, 
                                           allow_soft_placement=True), graph=igraph) as sess:
         imodel = import_model_state(imodel, sess, model_dir)        
-        sess.run(imodel.iterator.initializer, feed_dict={imodel.src_placeholder: [params["query"]],
+        sess.run(imodel.iterator.initializer, feed_dict={imodel.src_placeholder: [params["query"].strip()],
                                                          imodel.batch_size_placeholder: 1})
-        _, _, _, inferences = imodel.infer(sess)
+        _, _, inferences = imodel.infer(sess)
         inferences=inferences.transpose()
         inferences_list = inferences[0, : ].tolist()
         eos="</s>".encode("utf-8")

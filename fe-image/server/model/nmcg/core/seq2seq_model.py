@@ -111,8 +111,9 @@ class Seq2SeqModel(object):
                     residual_layers, 
                     current_step):
         dropout = self.get_dropout()
-        cell =  tf.contrib.rnn.BasicLSTMCell (self.hp.num_units, 
-                                              forget_bias=self.hp.forget_bias)
+        cell =  tf.nn.rnn_cell.LSTMCell(self.hp.num_units, 
+                                        forget_bias=self.hp.forget_bias,
+                                        name='basic_lstm_cell')
         if dropout > 0.0:
             cell = tf.contrib.rnn.DropoutWrapper(cell=cell,
                                                  input_keep_prob=(1.0 - dropout))
@@ -143,7 +144,7 @@ class Seq2SeqModel(object):
             decoder_cell = tf.contrib.seq2seq.AttentionWrapper (decoder_cell,
                                                                 attention_mechanism,
                                                                 attention_layer_size=self.hp.num_units,
-                                                                alignment_history = self.is_alignment_history,
+                                                                alignment_history = self.is_alignment_history(),
                                                                 name="attention" )
             decoder_cell = tf.contrib.rnn.DeviceWrapper (decoder_cell,
                                                          self.get_device (self.hp.decoder_layers -1, self.hp.num_gpus))
