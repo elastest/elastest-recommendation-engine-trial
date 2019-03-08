@@ -6,3 +6,5 @@
 *.pyc
 __pycache__/
 /.README.md.html
+/bin/
+/.factorypath
