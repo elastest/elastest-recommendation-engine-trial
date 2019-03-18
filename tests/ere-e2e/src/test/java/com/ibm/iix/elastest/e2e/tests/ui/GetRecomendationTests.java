@@ -85,7 +85,7 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 		logger.info("Running query");
 		driver.findElement(By.id("recDialogOk")).click();
 
-		waitForVisibility(20, "//div[@id='search-results-card']");
+		waitForVisibility(50, "//div[@id='search-results-card']");
 
 		if (checkContent) {
 			logger.info("Checking content ");
