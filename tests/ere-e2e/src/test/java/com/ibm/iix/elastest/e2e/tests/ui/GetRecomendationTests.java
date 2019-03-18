@@ -119,7 +119,7 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 		if (inlineHelp) {
 			logger.info("Verify new recomendation inline help content");
 
-			waitIgnoringErrors(20, "//*[@id=\"search-results-card\"]/div[2]/div/table[1]/thead/tr/th/i");
+			waitIgnoringErrors(50, "//*[@id=\"search-results-card\"]/div[2]/div/table[1]/thead/tr/th/i");
 			WebElement areaHelp = driver.findElement(By.xpath("//*[@id=\"recTCDesc\"]"));
 			String expectedMessage = "New code generated from the provided description.";
 			String areaHelpContent = areaHelp.getText();
@@ -240,6 +240,7 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 	 * methods verify that show details section contains correct content
 	 */
 	private void checkShowDetails() {
+		waitForVisibility(50, "//*[@id=\"search-results-card\"]/div[2]/div/table[2]/tbody[1]/tr[1]/td[2]/a");
 		driver.findElement(By.xpath("//*[@id=\"search-results-card\"]/div[2]/div/table[2]/tbody[1]/tr[1]/td[2]/a"))
 				.click();
 		;
