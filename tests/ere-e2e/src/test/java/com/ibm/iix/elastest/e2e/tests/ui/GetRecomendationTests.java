@@ -85,7 +85,7 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 		logger.info("Running query");
 		driver.findElement(By.id("recDialogOk")).click();
 
-		waitForVisibility(50, "//div[@id='search-results-card']");
+		waitForVisibility(100, "//div[@id='search-results-card']");
 
 		if (checkContent) {
 			logger.info("Checking content ");
@@ -119,7 +119,7 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 		if (inlineHelp) {
 			logger.info("Verify new recomendation inline help content");
 
-			waitIgnoringErrors(50, "//*[@id=\"search-results-card\"]/div[2]/div/table[1]/thead/tr/th/i");
+			waitIgnoringErrors(100, "//*[@id=\"search-results-card\"]/div[2]/div/table[1]/thead/tr/th/i");
 			WebElement areaHelp = driver.findElement(By.xpath("//*[@id=\"recTCDesc\"]"));
 			String expectedMessage = "New code generated from the provided description.";
 			String areaHelpContent = areaHelp.getText();
@@ -132,7 +132,7 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 				logger.error("Inline Recommended test case help content not correct " + e.toString());
 			}
 
-			waitIgnoringErrors(50, "//*[@id=\"search-results-card\"]/div[2]/div/table[2]/thead/tr[1]/th/i");
+			waitIgnoringErrors(100, "//*[@id=\"search-results-card\"]/div[2]/div/table[2]/thead/tr[1]/th/i");
 			WebElement taskHelp = driver.findElement(By.xpath("//*[@id=\"reuseTCDesc\"]"));
 			expectedMessage = "Most similar test cases existing in the repository.";
 			String taskHelpContent = taskHelp.getText();
@@ -240,7 +240,7 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 	 * methods verify that show details section contains correct content
 	 */
 	private void checkShowDetails() {
-		waitForVisibility(50, "//*[@id=\"search-results-card\"]/div[2]/div/table[2]/tbody[1]/tr[1]/td[2]/a");
+		waitForVisibility(100, "//*[@id=\"search-results-card\"]/div[2]/div/table[2]/tbody[1]/tr[1]/td[2]/a");
 		driver.findElement(By.xpath("//*[@id=\"search-results-card\"]/div[2]/div/table[2]/tbody[1]/tr[1]/td[2]/a"))
 				.click();
 		;
