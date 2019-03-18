@@ -132,7 +132,7 @@ public class GetRecomendationTests extends End2EndTestUtilities {
 				logger.error("Inline Recommended test case help content not correct " + e.toString());
 			}
 
-			waitIgnoringErrors(20, "//*[@id=\"search-results-card\"]/div[2]/div/table[2]/thead/tr[1]/th/i");
+			waitIgnoringErrors(50, "//*[@id=\"search-results-card\"]/div[2]/div/table[2]/thead/tr[1]/th/i");
 			WebElement taskHelp = driver.findElement(By.xpath("//*[@id=\"reuseTCDesc\"]"));
 			expectedMessage = "Most similar test cases existing in the repository.";
 			String taskHelpContent = taskHelp.getText();
